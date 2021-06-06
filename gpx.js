@@ -546,6 +546,11 @@ L.GPX = L.FeatureGroup.extend({
         clickable: options.marker_options.clickable,
         icon: options.marker_options.startIcon || new L.GPXTrackIcon({iconUrl: options.marker_options.startIconUrl})
       });
+
+      var startTime = this.get_start_time().toDateString() + ', '
+          + this.get_start_time().toLocaleTimeString();
+
+      marker.bindPopup("Start <strong>" + startTime + "</strong>").openPopup();
       this.fire('addpoint', { point: marker, point_type: 'start', element: el[0] });
       layers.push(marker);
     }
@@ -556,6 +561,14 @@ L.GPX = L.FeatureGroup.extend({
         clickable: options.marker_options.clickable,
         icon: options.marker_options.endIcon || new L.GPXTrackIcon({iconUrl: options.marker_options.endIconUrl})
       });
+
+      var endTime = this.get_end_time().toDateString() + ', '
+          + this.get_end_time().toLocaleTimeString();
+      var distance = (this.get_distance() / 1000).toFixed(2);
+      var duration = this.get_duration_string(this.get_moving_time());
+      var pace = this.get_duration_string(this.get_moving_pace(), true);
+
+      marker.bindPopup(`Last Update <strong>${endTime}</strong>.<br /> ${duration}, ${distance}km, ${pace} pace`).openPopup();
       this.fire('addpoint', { point: marker, point_type: 'end', element: el[el.length-1] });
       layers.push(marker);
     }
